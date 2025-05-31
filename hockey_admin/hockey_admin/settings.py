@@ -11,10 +11,21 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Загружаем переменные из .env
+load_dotenv()
+
+# Получаем параметры подключения из переменных окружения
+pg_host = os.getenv('POSTGRES_HOST')
+pg_port = os.getenv('POSTGRES_PORT')
+pg_user = os.getenv('POSTGRES_USER')
+pg_db = os.getenv('POSTGRES_DB')
+pg_password = os.getenv('POSTGRES_PASSWORD')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -74,14 +85,25 @@ WSGI_APPLICATION = 'hockey_admin.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+DATABASE_ROUTERS = ['news.db_router.BotDBRouter']
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # админка
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': pg_db,         # Название базы данных на сервере
+        'USER': pg_user,         # Пользователь PostgreSQL
+        'PASSWORD': pg_password,    # Пароль
+        'HOST': pg_host,  # Например: '127.0.0.1' или 'db.server.com'
+        'PORT': pg_port,                 # Обычно 5432, проверь
     },
     'bot_db': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': r'Z:\IT_files\PycharmProjects\clone_hockey_bot\pupkov_circle_hockey_bot\db\bot_database.db',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': pg_db,         # Название базы данных на сервере
+        'USER': pg_user,         # Пользователь PostgreSQL
+        'PASSWORD': pg_password,    # Пароль
+        'HOST': pg_host,  # Например: '127.0.0.1' или 'db.server.com'
+        'PORT': pg_port,                 # Обычно 5432, проверь
     }
 }
 

@@ -12,6 +12,7 @@ class PublishForm(forms.Form):
     post_time = forms.DateTimeField(
         required=False,
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        input_formats=['%Y-%m-%dT%H:%M'],  # формат для datetime-local без секунд
         label='Время публикации (оставьте пустым для текущего времени)'
     )
 
@@ -25,21 +26,23 @@ class HockeyNewsAdminForm(forms.ModelForm):
         widgets = {
             'post_time': forms.DateTimeInput(attrs={'type': 'datetime-local'})
         }
-        exclude = ['image']  # чтобы форма не пыталась редактировать image напрямую
+        exclude = ['image']
 
-    def clean(self):
-        cleaned_data = super().clean()
-        file = cleaned_data.get('image_file')
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        file = self.cleaned_data.get('image_file')
         if file:
-            cleaned_data['image'] = file.read()
-        return cleaned_data
+            instance.image = file.read()
+        if commit:
+            instance.save()
+        return instance
 
 
 class HockeyNewsAdmin(admin.ModelAdmin):
     form = HockeyNewsAdminForm
     list_display = ['news_id', 'ai_text_short', 'image_preview', 'post_time', 'is_post', 'action_buttons']
     readonly_fields = ['image_preview']
-    fields = ['news_id', 'ai_text', 'url_image', 'image_preview', 'image_file', 'post_time', 'is_post']
+    fields = ['news_id', 'ai_text', 'url_image', 'image_preview', 'image_file', 'is_post', 'post_time']
     list_display_links = ['news_id']  # Кликаем по news_id — открываем редактирование
 
     def ai_text_short(self, obj):
