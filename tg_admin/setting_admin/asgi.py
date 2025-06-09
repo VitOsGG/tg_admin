@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hockey_admin.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tg_admin.setting_admin')
 
 application = get_asgi_application()

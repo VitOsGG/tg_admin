@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'hockey_admin.urls'
+ROOT_URLCONF = 'setting_admin.urls'
 
 TEMPLATES = [
     {
@@ -79,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'hockey_admin.wsgi.application'
+WSGI_APPLICATION = 'setting_admin.wsgi.application'
 
 
 # Database
